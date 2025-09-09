@@ -1,0 +1,63 @@
+docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --device=/dev/net/tun --cap-add NET_ADMIN -v "${PWD:-.}/windows:/storage" --stop-timeout 120 dockurr/windowsservices:
+  windows:
+    image: dockurr/windows
+    container_name: windows
+    environment:
+      VERSION: "11"
+    devices:
+      - /dev/kvm
+      - /dev/net/tun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8006:8006
+      - 3389:3389/tcp
+      - 3389:3389/udp
+    volumes:
+      - ./windows:/storage
+    restart: always
+    stop_grace_period: 2mkubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/master/kubernetes.ymlenvironment:
+  VERSION: "11"volumes:
+  - ./windows:/storageenvironment:
+  DISK_SIZE: "256G"volumes:
+  -  ./example:/dataenvironment:
+  RAM_SIZE: "8G"
+  CPU_CORES: "4"environment:
+  USERNAME: "bill"
+  PASSWORD: "gates"environment:
+  LANGUAGE: "French"environment:
+  REGION: "en-US"
+  KEYBOARD: "en-US"environment:
+  EDITION: "core"environment:
+  VERSION: "https://example.com/win.iso"volumes:
+  - ./example.iso:/boot.isodocker network create -d macvlan \
+    --subnet=192.168.0.0/24 \
+    --gateway=192.168.0.1 \
+    --ip-range=192.168.0.100/28 \
+    -o parent=eth0 vlanvolumes:
+  -  ./example:/oemenvironment:
+  MANUAL: "Y"environment:
+  DHCP: "Y"
+devices:
+  - /dev/vhost-net
+device_cgroup_rules:
+  - 'c *:* rwm'services:
+  windows:
+    container_name: windows
+    ..<snip>..
+    networks:
+      vlan:
+        ipv4_address: 192.168.0.100
+
+environment:
+  DISK2_SIZE: "32G"
+  DISK3_SIZE: "64G"
+volumes:
+  - ./example2:/storage2
+  - ./example3:/storage3devices:
+  - /dev/sdb:/disk1
+  - /dev/sdc1:/disk2environment:
+  ARGUMENTS: "-device usb-host,vendorid=0x1234,productid=0x1234"
+devices:
+  - /dev/bus/usbsudo apt install cpu-checker
+sudo kvm-ok
